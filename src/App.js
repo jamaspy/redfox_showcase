@@ -1,5 +1,7 @@
 import React from "react";
 import { Router, Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "./store";
 import createBrowserHistory from "history/createBrowserHistory";
 import { Customers, Dashboard } from "./components";
 import { Header } from "./components/layout";
@@ -7,10 +9,11 @@ export const history = createBrowserHistory();
 
 const App = () => {
   return (
-    <Router history={history}>
-      <Header></Header>
-      <Switch>
-        {/* <PrivateRoute path="/" exact component={Home} />
+    <Provider store={store}>
+      <Router history={history}>
+        <Header></Header>
+        <Switch>
+          {/* <PrivateRoute path="/" exact component={Home} />
         <Route path="/auth/" exact component={AuthCheck} />
         <PrivateRoute path="/contact" exact component={Contact} />
         <Route path="/login" exact component={Login} />
@@ -28,10 +31,11 @@ const App = () => {
         <Route path="/verifyemail" component={EmailVerified} />
         <Route path="/resendverifyemail" exact component={ResendVerifyEmail} />
         <Route path="*" component={Error} /> */}
-        <Route path="/customers/" exact component={Customers} />
-        <Route path="/dashboard/" exact component={Dashboard} />
-      </Switch>
-    </Router>
+          <Route path="/customers/" exact component={Customers} />
+          <Route path="/dashboard/" exact component={Dashboard} />
+        </Switch>
+      </Router>
+    </Provider>
   );
 };
 export default App;

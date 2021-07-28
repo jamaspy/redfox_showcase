@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { Column } from "./components";
 import { get } from "lodash";
 import { initialData } from "../../data";
-
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { controlDragState } from "../../store/actions";
 const DragArea = styled.div`
   /* margin: 8px; */
   padding: 20px;
@@ -12,8 +14,16 @@ const DragArea = styled.div`
   flex-direction: row;
   /* background-color: pink; */
 `;
-const Dashboard = () => {
-  const [state, setState] = useState(initialData);
+const Dashboard = ({ dispatchControlDragState, allState }) => {
+  //const [state, setState] = useState([]);
+
+  // const handleClick = () => {
+  //   dispatchTest();
+  //   console.log("TESTY", allState);
+  // };
+  // useEffect(() => {
+  //   setState(allState);
+  // }, [allState]);
 
   const onDragStart = () => {
     document.body.style.color = "#C38737";
@@ -23,7 +33,7 @@ const Dashboard = () => {
   const onDragUpdate = (update) => {
     const { destination } = update;
     const opacity = destination
-      ? destination.index / Object.keys(state.tasks).length
+      ? destination.index / Object.keys(allState.tasks).length
       : 0;
     document.body.style.backgroundColor = `rgba(21, 68, 104, ${opacity + 0.5})`;
   };
@@ -43,8 +53,8 @@ const Dashboard = () => {
       return;
     }
 
-    const start = state.columns[source.droppableId];
-    const finish = state.columns[destination.droppableId];
+    const start = allState.columns[source.droppableId];
+    const finish = allState.columns[destination.droppableId];
 
     if (start === finish) {
       const newTaskIds = Array.from(start.taskIds);
@@ -58,17 +68,17 @@ const Dashboard = () => {
         ...start,
         taskIds: newTaskIds,
       };
-      // Put new column order into the picture of the state
+      // Put new column order into the picture of the allState
       // second spread not needed on oe column
       const newState = {
-        ...state,
+        ...allState,
         columns: {
-          ...state.columns,
+          ...allState.columns,
           [newColumn.id]: newColumn,
         },
       };
 
-      setState(newState);
+      dispatchControlDragState(newState);
       // And then send the new State to Michaels server
       // .catch(err) do something
       return;
@@ -90,34 +100,54 @@ const Dashboard = () => {
     };
 
     const newState = {
-      ...state,
+      ...allState,
       columns: {
-        ...state.columns,
+        ...allState.columns,
         [newStart.id]: newStart,
         [newFinish.id]: newFinish,
       },
     };
-    setState(newState);
+    dispatchControlDragState(newState);
 
     // @TODO This is an optimistic update you need to call the server here and then set the state with the server state
   };
 
-  return (
-    <DragArea>
-      <DragDropContext
-        onDragStart={onDragStart}
-        onDragUpdate={onDragUpdate}
-        onDragEnd={onDragEnd}
-      >
-        {state.columnOrder.map((columnId) => {
-          const column = get(state, ["columns", [columnId]], []);
-          const tasks = column?.taskIds.map((taskId) => state.tasks[taskId]);
+  const addTask = () => {
+    const { tasks } = allState.dashboard;
+    const currentTasks = tasks;
+  };
 
-          return <Column key={column.id} column={column} tasks={tasks} />;
-        })}
-      </DragDropContext>
-    </DragArea>
+  return (
+    <div>
+      <DragArea>
+        <DragDropContext
+          onDragStart={onDragStart}
+          onDragUpdate={onDragUpdate}
+          onDragEnd={onDragEnd}
+        >
+          {get(allState, "columnOrder", []).map((columnId) => {
+            const column = get(allState, ["columns", [columnId]], []);
+            const tasks = column?.taskIds.map(
+              (taskId) => allState.tasks[taskId]
+            );
+
+            return <Column key={column.id} column={column} tasks={tasks} />;
+          })}
+        </DragDropContext>
+      </DragArea>
+    </div>
   );
 };
 
-export default Dashboard;
+const mapStateToProps = (state) => ({
+  allState: state.dashboard,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatchControlDragState: (newState) => dispatch(controlDragState(newState)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Dashboard));

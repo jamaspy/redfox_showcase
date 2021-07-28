@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { Column } from "./components";
 import { get } from "lodash";
-import { initialData } from "../../data";
+
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { controlDragState } from "../../store/actions";
@@ -15,16 +15,6 @@ const DragArea = styled.div`
   /* background-color: pink; */
 `;
 const Dashboard = ({ dispatchControlDragState, allState }) => {
-  //const [state, setState] = useState([]);
-
-  // const handleClick = () => {
-  //   dispatchTest();
-  //   console.log("TESTY", allState);
-  // };
-  // useEffect(() => {
-  //   setState(allState);
-  // }, [allState]);
-
   const onDragStart = () => {
     document.body.style.color = "#C38737";
     document.body.style.transition = "background-color 0.2s ease";

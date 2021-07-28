@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { connect } from "react-redux";
 import { addNewTask, setColumnIdForNewTask } from "../../../store/actions";
 const Container = styled.div`
-  ${tw`flex-1 flex-col m-4 border border-gray-300 rounded-lg`}
+  ${tw`flex-1 flex-col m-2 border border-gray-300 rounded-lg`}
 `;
 const Title = styled.h3`
   ${tw`p-4 text-center font-semibold text-xl`}
@@ -15,9 +15,9 @@ const Title = styled.h3`
 const TaskList = styled.div`
   padding: 8px;
   transition: background-color 0.2s ease-in-out;
-  background-color: ${(props) => (props.isDraggingOver ? "#C38737" : "white")};
+  background-color: ${(props) => (props.isDraggingOver ? "#C38737" : "")};
   flex-grow: 1;
-  min-height: 100px;
+  min-height: 400px;
 `;
 
 const AddButton = styled.div`
@@ -49,8 +49,10 @@ const Column = ({
         +
       </AddButton>
       {show && (
-        <form>
+        <form className="p-2 text-center">
           <input
+            className="border rounded"
+            placeholder="enter task"
             name="newtask"
             id="newtask"
             type="text"
@@ -58,12 +60,16 @@ const Column = ({
             onChange={(e) => setNewTaskTitle(e.target.value)}
             onBlur={(e) => setNewTaskTitle(e.target.value)}
           />
-          <button type="button" onClick={handleCreateNewTask}>
+          <button
+            className="rounded m-auto bg-yellow-700 p-1 text-xs text-white font-semibold mt-1"
+            type="button"
+            onClick={handleCreateNewTask}
+          >
             Save
           </button>
         </form>
       )}
-      <Title>{column.title}</Title>
+      <Title className="text-white">{column.title}</Title>
       <Droppable droppableId={column.id}>
         {(provided, snapshot) => (
           <TaskList

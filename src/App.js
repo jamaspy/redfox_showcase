@@ -5,7 +5,7 @@ import { store } from "./store";
 import createBrowserHistory from "history/createBrowserHistory";
 import { Customers, Dashboard } from "./components";
 import { Login } from "./components/auth";
-import { Header } from "./components/layout";
+import { Header, Landing } from "./components/layout";
 export const history = createBrowserHistory();
 
 const App = () => {
@@ -14,6 +14,7 @@ const App = () => {
       <Router history={history}>
         <Header></Header>
         <Switch>
+          <Route path="/" exact component={Landing} />
           <Route path="/login" exact component={Login} />
           <Route path="/customers" exact component={Customers} />
           <Route path="/customers/:id" exact component={Customers} />

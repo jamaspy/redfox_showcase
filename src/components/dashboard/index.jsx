@@ -12,7 +12,7 @@ const DragArea = styled.div`
   padding: 20px;
   display: flex;
   flex-direction: row;
-  /* background-color: pink; */
+  background-color: #154468;
 `;
 const Dashboard = ({ dispatchControlDragState, allState }) => {
   const onDragStart = () => {

@@ -1,3 +1,3 @@
 import Header from "./Header";
-
-export { Header };
+import Landing from "./Landing";
+export { Header, Landing };

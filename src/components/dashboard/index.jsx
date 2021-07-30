@@ -102,11 +102,6 @@ const Dashboard = ({ dispatchControlDragState, allState }) => {
     // @TODO This is an optimistic update you need to call the server here and then set the state with the server state
   };
 
-  const addTask = () => {
-    const { tasks } = allState.dashboard;
-    const currentTasks = tasks;
-  };
-
   return (
     <div>
       <DragArea>

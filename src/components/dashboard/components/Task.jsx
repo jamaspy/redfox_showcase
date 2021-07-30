@@ -3,8 +3,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { Draggable } from "react-beautiful-dnd";
 import { renderIcon } from "../utils";
-import { Popover } from "@material-ui/core";
-import { v4 as uuidv4 } from "uuid";
+
 import { CgMoreO } from "react-icons/cg";
 const Container = styled.div`
   ${tw`border border-gray-300 rounded-full p-4 mb-3 font-semibold shadow-md flex-grow flex justify-center items-center flex-col`}
